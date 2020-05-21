@@ -327,6 +327,13 @@ api_addr      = "$api_addr"
 EOF
 )
   fi
+  
+  local -r service_registration_stanza=$(cat <<EOF
+service_registration "consul" {
+  address = "127.0.0.1:8500"
+}
+EOF
+)
 
   vault_version_at_least "$config_path" "$ui_config"
 
@@ -334,6 +341,7 @@ EOF
   echo -e "$listener_config" >> "$config_path"
   echo -e "$s3_config" >> "$config_path"
   echo -e "$vault_storage_backend" >> "$config_path"
+  echo -e "$service_registration_stanza" >> "$config_path"
 
   chown "$user:$user" "$config_path"
 }
