@@ -166,6 +166,8 @@ function generate_vault_agent_config {
   local -r auth_mount_path="$8"
   local -r auth_type="$9"
   local -r auth_role="${10}"
+  local -r enable_cache="$11"
+  local -r enable_listener="$12"
 
   local -r config_path="$config_dir/$VAULT_CONFIG_FILE"
 
@@ -217,9 +219,33 @@ auto_auth {
 }\n
 EOF
 )
+  
+  local cache_stanza=""
+  if [[ ! -z $enable_cache ]]; then
+   cache_stanza=$(cat <<EOF
+cache {
+  use_auto_auth_token = true
+}\n
+EOF
+)
+  fi
+
+  local listener_stanza=""
+  if [[ ! -z $enable_listener ]]; then
+   listener_stanza=$(cat <<EOF
+listener "tcp" {
+  address = "127.0.0.1:8200"
+  tls_disable = true
+}\n
+EOF
+)
+  fi
+
   echo -e "$pid_config" > "$config_path"
   echo -e "$vault_config" >> "$config_path"
   echo -e "$auto_auth_config" >> "$config_path"
+  echo -e "$cache_stanza" >> "$config_path"
+  echo -e "$listener_stanza" >> "$config_path"
 
   chown "$user:$user" "$config_path"
 }
@@ -471,6 +497,8 @@ function run {
   local auto_unseal_kms_key_id=""
   local auto_unseal_kms_key_region=""
   local auto_unseal_endpoint=""
+  local enable_cache="false"
+  local enable_listener="false"
   local all_args=()
 
   while [[ $# > 0 ]]; do
@@ -615,6 +643,12 @@ function run {
         auto_unseal_endpoint="$2"
         shift
         ;;
+      --enable-cache)
+        enable_cache="true"
+        ;;
+      --enable-listener)
+        enable_listener="true"
+        ;;
       --help)
         print_usage
         exit
@@ -700,7 +734,9 @@ function run {
         "$agent_client_key_file" \
         "$agent_auth_mount_path" \
         "$agent_auth_type" \
-        "$agent_auth_role"
+        "$agent_auth_role" \
+        "$enable_cache" \
+        "$enable_listener"
     else
       log_info "Running as Vault server"
       generate_vault_config \
