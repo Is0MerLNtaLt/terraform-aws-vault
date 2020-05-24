@@ -8,7 +8,7 @@ readonly VAULT_PID_FILE="vault-pid"
 readonly VAULT_TOKEN_FILE="vault-token"
 readonly SYSTEMD_CONFIG_PATH="/etc/systemd/system/vault.service"
 
-readonly DEFAULT_AGENT_VAULT_ADDRESS="vault.service.consul"
+readonly DEFAULT_AGENT_VAULT_ADDRESS="127.0.0.1"
 readonly DEFAULT_AGENT_AUTH_MOUNT_PATH="auth/aws"
 
 readonly DEFAULT_PORT=8200
@@ -194,7 +194,7 @@ EOF
 
   local -r vault_config=$(cat <<EOF
 vault {
-  address = "https://$vault_address:$vault_port"
+  address = "http://$vault_address:$vault_port"
 $ca_cert_config
 $client_cert_config
 }\n
