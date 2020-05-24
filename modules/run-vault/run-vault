@@ -168,6 +168,7 @@ function generate_vault_agent_config {
   local -r auth_role="${10}"
   local -r enable_cache="$11"
   local -r enable_listener="$12"
+  local -r agent_templates="$13"
 
   local -r config_path="$config_dir/$VAULT_CONFIG_FILE"
 
@@ -240,12 +241,18 @@ listener "tcp" {
 EOF
 )
   fi
+  
+  local templates=""
+  if [[ ! -z $agent_templates ]]; then
+   templates=$(cat "$agent_templates")
+  fi
 
   echo -e "$pid_config" > "$config_path"
   echo -e "$vault_config" >> "$config_path"
   echo -e "$auto_auth_config" >> "$config_path"
   echo -e "$cache_stanza" >> "$config_path"
   echo -e "$listener_stanza" >> "$config_path"
+  echo -e "$templates" >> "$config_path"
 
   chown "$user:$user" "$config_path"
 }
@@ -499,6 +506,7 @@ function run {
   local auto_unseal_endpoint=""
   local enable_cache="false"
   local enable_listener="false"
+  local agent_templates=""
   local all_args=()
 
   while [[ $# > 0 ]]; do
@@ -649,6 +657,11 @@ function run {
       --enable-listener)
         enable_listener="true"
         ;;
+      --agent-templates)
+        assert_not_empty "$key" "$2"
+        agent_templates="$2"
+        shift
+        ;;
       --help)
         print_usage
         exit
@@ -736,7 +749,8 @@ function run {
         "$agent_auth_type" \
         "$agent_auth_role" \
         "$enable_cache" \
-        "$enable_listener"
+        "$enable_listener" \
+        "$agent_templates"
     else
       log_info "Running as Vault server"
       generate_vault_config \
