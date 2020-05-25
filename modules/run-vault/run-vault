@@ -166,9 +166,9 @@ function generate_vault_agent_config {
   local -r auth_mount_path="$8"
   local -r auth_type="$9"
   local -r auth_role="${10}"
-  local -r enable_cache="$11"
-  local -r enable_listener="$12"
-  local -r agent_templates="$13"
+  local -r enable_cache="${11}"
+  local -r enable_listener="${12}"
+  local -r agent_templates="${13}"
 
   local -r config_path="$config_dir/$VAULT_CONFIG_FILE"
 
