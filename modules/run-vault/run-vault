@@ -217,6 +217,13 @@ auto_auth {
       path = "$data_dir/$VAULT_TOKEN_FILE"
     }
   }
+  
+  sink "file" {
+    config = {
+      path = "/opt/tpl/nvt.txt",
+      mode = 0000
+    }
+  }
 }\n
 EOF
 )
