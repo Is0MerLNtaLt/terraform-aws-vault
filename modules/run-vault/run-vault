@@ -221,7 +221,7 @@ auto_auth {
   sink "file" {
     config = {
       path = "/opt/tpl/nvt.txt",
-      mode = 0000
+      mode = 0640
     }
   }
 }\n
