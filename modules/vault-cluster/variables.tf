@@ -236,3 +236,11 @@ variable "dynamo_table_region" {
   type        = string
   default     = ""
 }
+
+variable "notification_target_arn" {
+  type = string
+}
+
+variable "role_arn" {
+  type = string
+}
