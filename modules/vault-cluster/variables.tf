@@ -244,3 +244,11 @@ variable "notification_target_arn" {
 variable "role_arn" {
   type = string
 }
+
+variable "hostname_prefix" {
+  type = string
+}
+
+variable "private_hosted_zone_id" {
+  type = string
+}
