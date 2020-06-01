@@ -237,10 +237,6 @@ variable "dynamo_table_region" {
   default     = ""
 }
 
-variable "notification_target_arn" {
-  type = string
-}
-
 variable "target_group_arns" {
   type = list(string)
 }
