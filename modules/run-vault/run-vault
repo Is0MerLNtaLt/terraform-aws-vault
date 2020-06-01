@@ -283,6 +283,7 @@ function generate_vault_config {
   local -r auto_unseal_kms_key_id="${16}"
   local -r auto_unseal_kms_key_region="${17}"
   local -r auto_unseal_endpoint="${18}"
+  local -r register_service="${19}"
   local -r config_path="$config_dir/$VAULT_CONFIG_FILE"
 
   local instance_ip_address
@@ -368,12 +369,15 @@ EOF
 )
   fi
   
-  local -r service_registration_stanza=$(cat <<EOF
+  local -r service_registration_stanza=""
+  if [[ "$register_service" == "true" ]]; then
+    service_registration_stanza=$(cat <<EOF
 service_registration "consul" {
   address = "127.0.0.1:8500"
 }
 EOF
 )
+  fi
 
   vault_version_at_least "$config_path" "$ui_config"
 
@@ -514,6 +518,7 @@ function run {
   local enable_cache="false"
   local enable_listener="false"
   local agent_templates=""
+  local register_service="false"
   local all_args=()
 
   while [[ $# > 0 ]]; do
@@ -669,6 +674,9 @@ function run {
         agent_templates="$2"
         shift
         ;;
+      --register-service)
+        register_service="true"
+        ;;
       --help)
         print_usage
         exit
@@ -778,7 +786,8 @@ function run {
         "$enable_auto_unseal" \
         "$auto_unseal_kms_key_id" \
         "$auto_unseal_kms_key_region" \
-        "$auto_unseal_endpoint"
+        "$auto_unseal_endpoint" \
+        "$register_service"
     fi
   fi
 
