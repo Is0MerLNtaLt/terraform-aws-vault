@@ -90,30 +90,6 @@ resource "aws_autoscaling_group" "autoscaling_group" {
   lifecycle {
     create_before_destroy = true
   }
-  
-  initial_lifecycle_hook {
-    name                    = "lifecycle-launching"
-    default_result          = "ABANDON"
-    heartbeat_timeout       = 60
-    lifecycle_transition    = "autoscaling:EC2_INSTANCE_LAUNCHING"
-    notification_target_arn = var.notification_target_arn
-    role_arn                = var.role_arn
-  }
-
-  initial_lifecycle_hook {
-    name                    = "lifecycle-terminating"
-    default_result          = "ABANDON"
-    heartbeat_timeout       = 60
-    lifecycle_transition    = "autoscaling:EC2_INSTANCE_TERMINATING"
-    notification_target_arn = var.notification_target_arn
-    role_arn                = var.role_arn
-  }
-
-  tag {
-    key                 = "asg:hostname_pattern"
-    value               = "${var.hostname_prefix}@${var.private_hosted_zone_id}"
-    propagate_at_launch = true
-  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -411,4 +387,3 @@ resource "aws_iam_role_policy" "vault_auto_unseal_kms" {
     create_before_destroy = true
   }
 }
-
