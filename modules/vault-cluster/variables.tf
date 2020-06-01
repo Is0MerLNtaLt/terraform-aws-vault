@@ -241,14 +241,6 @@ variable "notification_target_arn" {
   type = string
 }
 
-variable "role_arn" {
-  type = string
-}
-
-variable "hostname_prefix" {
-  type = string
-}
-
-variable "private_hosted_zone_id" {
-  type = string
+variable "target_group_arns" {
+  type = list(string)
 }
