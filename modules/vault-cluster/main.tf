@@ -90,6 +90,9 @@ resource "aws_autoscaling_group" "autoscaling_group" {
   lifecycle {
     create_before_destroy = true
   }
+  
+  target_group_arns = var.target_group_arns
+  
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
