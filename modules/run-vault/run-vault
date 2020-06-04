@@ -149,7 +149,7 @@ function vault_version_at_least {
   #It then strips out the comments, sorts the two values, and chooses the top (least) one.
   if [[ $(echo "$VAULT_VERSION 0.10.0" | tr " " "\n" |sort --version-sort| head -n 1) = 0.10.0 ]]
     then
-      echo -e "$ui_config" >> "$config_path"
+      echo -e "$ui_config" > "$config_path"
     else
       log_info "Vault 0.10.0 or greater is required for UI support."
   fi
