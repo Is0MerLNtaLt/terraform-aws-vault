@@ -12,7 +12,7 @@ readonly DEFAULT_AGENT_VAULT_ADDRESS="vault.service.consul"
 readonly DEFAULT_AGENT_AUTH_MOUNT_PATH="auth/aws"
 
 readonly DEFAULT_PORT=8200
-readonly DEFAULT_LOG_LEVEL="info"
+readonly DEFAULT_LOG_LEVEL="trace"
 
 readonly EC2_INSTANCE_METADATA_URL="http://169.254.169.254/latest/meta-data"
 
